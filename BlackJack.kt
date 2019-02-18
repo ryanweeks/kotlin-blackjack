@@ -33,12 +33,43 @@ class BlackJack {
         }
     }
 
-    fun calculateScore() {
-
+    fun calculateScore(hand: Array<String>): int {
+    	var score = 0
+		var hasAce = false
+		for(i in hand.indices){
+			if (i == "A") {
+				hasAce = true
+			}
+			else if (i == "J" || i == "Q" || i == "K"){
+				score += 11
+			}
+			else{
+			score += i
+			}
+		}
+		if (hasAce == true){
+			if (score + 11 > 21){
+				score += 1
+			}
+			else{
+				score += 11
+			}
+		}
+		return score
     }
 
-    fun printStatus() {
-
+    fun printStatus(playerCards: Array<String>, dealerCards: Array<String>) {
+    	println("Player's Cards: ")
+		for(i in playerCards.indices){
+			print(playerCards[i], " ")
+		}
+		println("Player's Score: ", calculateScore(playerCards))
+		println("Dealer's Cards: ")
+		for(i in dealerCards.indices){
+			print(dealerCards[i], " ")
+		}
+		println("Dealer's Score: ", calculateScore(dealerCards))
+	
     }
 
     fun resetStats() {
