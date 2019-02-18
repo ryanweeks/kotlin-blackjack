@@ -1,27 +1,28 @@
 package blackjack
 
+// Class to play a simple game of blackjack
 class BlackJack {
-    private val deck = mutableListOf<String>()
-    private val playerHand = mutableListOf<String>()
-    private val dealerHand = mutableListOf<String>()
+
+    // val - Read only
+    // var - Mutable
+    private var deck = mutableListOf<String>()
+    private var playerHand = mutableListOf<String>()
+    private var dealerHand = mutableListOf<String>()
     private var games = 0
     private var wins = 0
     private var losses = 0
     private var draws = 0
     private var busts = 0
 
+    // Default initializer
     // Initialize the deck
     init {
         this.resetDecks()
         this.resetStats()
     }
 
-    fun shuffleDeck(){
-        deck.shuffle()
-    }
-
     // Move a card from deck to hand
-    fun drawCard(playerTurn: Boolean) {
+    private fun drawCard(playerTurn: Boolean) {
         val card = deck[0]
         deck.removeAt(0)
         if (playerTurn) { // player turn
@@ -31,7 +32,8 @@ class BlackJack {
         }
     }
 
-    fun calculateScore(hand: MutableList<String>): Int {
+    // Calculates score of a users hand
+    private fun calculateScore(hand: MutableList<String>): Int {
     	var score = 0
 		var hasAce = false
 		for(i in hand.indices){
@@ -57,8 +59,10 @@ class BlackJack {
 		return score
     }
 
-    fun printStatus() {
+    // Prints the status of both the player's and dealer's hands
+    private fun printStatus() {
     	println("Player's Cards: ")
+
 		for(card in playerHand){
 			print("$card ")
 		}
@@ -68,16 +72,18 @@ class BlackJack {
 			print( "$card ")
 		}
 		println("\nDealer's Score: ${calculateScore(dealerHand)}")
-	
     }
 
+    // Resets all stats to 0
     fun resetStats() {
         this.wins = 0
         this.losses = 0
         this.draws = 0
         this.busts = 0
     }
-    fun resetDecks() {
+
+    //Resets the deck & hands
+    private fun resetDecks() {
         deck.clear()
         playerHand.clear()
         dealerHand.clear()
@@ -97,6 +103,7 @@ class BlackJack {
         deck.add("K")
     }
 
+    // Displays stats
     fun displayStats() {
         println("Games Played: $games")
         println("Wins: $wins")
@@ -105,7 +112,8 @@ class BlackJack {
         println("Busts: $busts")
     }
 
-    fun playerHits(): Boolean{
+    // Used when player enters 'H' in play() game loop
+    private fun playerHits(): Boolean{
         var busted = false
         println("User hits")
         drawCard(true)
@@ -121,7 +129,8 @@ class BlackJack {
         return busted
     }
 
-    fun determineGameResult(){
+    // Determines the final result at the end of play()
+    private fun determineGameResult(){
         val dealerScore = calculateScore(dealerHand)
         val playerScore = calculateScore(playerHand)
 
@@ -141,6 +150,7 @@ class BlackJack {
         }
     }
 
+    // Plays a full game
     fun play(){
         var playing = true
         var busted = false
