@@ -59,15 +59,15 @@ class BlackJack {
 
     fun printStatus() {
     	println("Player's Cards: ")
-		for(i in playerHand.indices){
-			print("$playerHand[i] ")
+		for(card in playerHand){
+			print("$card ")
 		}
-		println("Player's Score: ${calculateScore(playerHand)}")
+		println("\nPlayer's Score: ${calculateScore(playerHand)}")
 		println("Dealer's Cards: ")
-		for(i in dealerHand.indices){
-			print( "$dealerHand[i] ")
+		for(card in dealerHand){
+			print( "$card ")
 		}
-		println("Dealer's Score: ${calculateScore(dealerHand)}")
+		println("\nDealer's Score: ${calculateScore(dealerHand)}")
 	
     }
 
@@ -143,6 +143,7 @@ class BlackJack {
 
     fun play(){
         var playing = true
+        var busted = false
         resetDecks()
         deck.shuffle()
 
@@ -156,13 +157,13 @@ class BlackJack {
         printStatus()
 
         // Player loop
-        while(playing) {
+        while(playing && !busted) {
             println ("Do you want to (H)it, (S)tay, or (Q)uit?")
-            val input = readLine()
+            val input = readLine().toString().toUpperCase()
 
             // Switch statement in Kotlin
             when (input){
-                "H" -> playing = !playerHits() // playerHits() returns true if busted
+                "H" -> busted = playerHits() // playerHits() returns true if busted
                 "S" -> { // User decides to stay
                     println("User stays")
                     playing = false // ends game
@@ -175,13 +176,14 @@ class BlackJack {
             }
         }
 
-        println("Dealer draws rest of cards.")
-        while (calculateScore(dealerHand) < 17) {
-            drawCard(false)
+        if(!busted) {
+            println("Dealer draws rest of cards.")
+            while (calculateScore(dealerHand) < 17) {
+                drawCard(false)
+            }
+            printStatus()
+            determineGameResult()
         }
-
-        printStatus()
-        determineGameResult()
         games ++
     }
 }
